@@ -2,7 +2,7 @@
 # @Author: chengdlin2
 # @Date:   2020-02-23 19:19:29
 # @Last Modified by:   chengdlin2
-# @Last Modified time: 2020-03-04 19:59:16
+# @Last Modified time: 2020-03-04 20:15:12
 
 
 # use MINIST Classifier and Sine Regressor as basic model to test maml
@@ -138,9 +138,11 @@ if __name__ == "__main__":
     X = X.to(torch.device('cpu'))
     y = y.to(torch.device('cpu'))
     plt.scatter(X, y, label='data')
-    plt.legend(loc='lower right')
+    plt.legend(loc='upper right')
     plt.subplot(2, 2, 2)
+    plt.title("Fine Tune Loss")
     plt.plot(losses)
     plt.subplot(2,2,3)
+    plt.title("Meta Train Loss")
     plt.plot(maml.plot_losses)
     plt.show()
