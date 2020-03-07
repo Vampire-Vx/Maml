@@ -2,7 +2,7 @@
 # @Author: chengdlin2
 # @Date:   2020-02-23 19:19:29
 # @Last Modified by:   chengdlin2
-# @Last Modified time: 2020-03-04 20:15:12
+# @Last Modified time: 2020-03-07 18:52:30
 
 
 # use MINIST Classifier and Sine Regressor as basic model to test maml
@@ -36,7 +36,7 @@ class Sine_Task():
         
         return self.amplitude * np.sin(self.phase + x)
         
-    def sample_data(self, size=1):
+    def sample_data(self, size=1, split='s'):
         """
         Sample data from this task.
         

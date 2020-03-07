@@ -2,7 +2,7 @@
 # @Author: chengdlin2
 # @Date:   2019-10-20 14:45:59
 # @Last Modified by:   chengdlin2
-# @Last Modified time: 2020-03-03 21:57:38
+# @Last Modified time: 2020-03-07 18:53:10
 """Meta Learner Implementation of Maml
    1st order approximation
    todo: 2nd order version extension
@@ -26,12 +26,12 @@ def replace_grad(parameter_gradients, parameter_name):
     return replace_grad_
 
 class MAML():
-    def __init__(self, model, tasks, inner_lr, meta_lr, K=10, inner_steps=1, tasks_per_meta_batch=1000):
+    def __init__(self, model, tasks, inner_lr, meta_lr, K=10, inner_steps=1, tasks_per_meta_batch=1000, criterion=nn.MSELoss()):
         
         # important objects
         self.tasks = tasks
         self.model = model
-        self.criterion = nn.MSELoss()
+        self.criterion = criterion
         self.meta_optimizer = torch.optim.SGD(model.parameters(), meta_lr)
         # hyperparameters
         self.inner_lr = inner_lr
@@ -47,7 +47,7 @@ class MAML():
            copy method: load_state_dict or deep copy
         """
         # get K samples for a specific task from trainning data
-        X_train, y_train = task.sample_data(self.K)
+        X_train, y_train = task.sample_data(self.K, split='s')
         # instantiate a completely new model using deepcopy
         # if using 2nd order approximation, fuctional_forward may needed
         fast_model = copy.deepcopy(self.model)
@@ -61,7 +61,7 @@ class MAML():
             # update 
             fast_optim.step()
         # sample new data for meta update
-        X_val, y_val = task.sample_data(self.K)
+        X_val, y_val = task.sample_data(self.K, split='q')
         output = fast_model(X_val)
         # loss is for 2nd order version of MAML
         loss = self.criterion(output, y_val)
